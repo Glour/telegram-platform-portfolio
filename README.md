@@ -22,7 +22,7 @@ python3.12 -m venv .venv
 . .venv/bin/activate
 pip install -e '.[dev]'
 ruff check src tests alembic
-pytest -q tests/test_market_authorization_unit.py tests/test_contact_broadcast_policy_unit.py tests/test_link_validation_unit.py \
+pytest -q tests/test_campaign_conflicts_unit.py tests/test_market_authorization_unit.py tests/test_contact_broadcast_policy_unit.py tests/test_link_validation_unit.py \
   tests/test_spambot_appeal_automatic.py tests/test_spambot_appeal_rules.py \
   tests/test_billing_config.py tests/test_trial_access.py \
   tests/test_account_market_payments.py tests/test_operations_alerts.py

@@ -30,6 +30,7 @@ from app.modules.ai.humanizer import normalize_author_gender
 from app.modules.ai.models import AiGeneration, CommentPromptTemplate
 from app.modules.ai.service import AiProviderError, generate_chat_reply_text, generate_comment_text
 from app.modules.campaigns.behavior_protection import apply_behavior_delay_range
+from app.modules.campaigns.conflicts import campaign_account_conflict_keys
 from app.modules.campaigns.models import Campaign, CampaignAction, CampaignEvent, CampaignRun, CampaignTarget
 from app.modules.campaigns.schemas import (
     CampaignChannelReportSummary,
@@ -1140,7 +1141,7 @@ async def tick_active_campaign_runs(
 
 
 def _campaign_account_conflict_keys(campaign: Campaign) -> set[tuple[str, str]]:
-    return {(campaign.type, account_id) for account_id in _campaign_account_ids(campaign)}
+    return campaign_account_conflict_keys(campaign.type, _campaign_account_ids(campaign))
 
 
 def _campaign_account_ids(campaign: Campaign) -> set[str]:
