@@ -1,3 +1,4 @@
+import { cleanOptionalText, splitTextareaValues, numberOrNull, parseReactionWeights, reactionWeightsText } from "@/lib/form-parsing";
 import { statusLabel, isCampaignStoppable, campaignEventLabel, campaignEventMessage, campaignErrorText, campaignSkipReasonLabel } from "@/lib/campaign-labels";
 import { clampNumber, splitRefs, dialogKindRu, formatDateTimeRu, formatTimeOnlyRu, formatRestrictionUntilMoscow } from "@/lib/display";
 import { TelegramClient } from "@/components/TelegramClient";
@@ -31394,11 +31395,6 @@ function initials(value: string) {
   );
 }
 
-function cleanOptionalText(value: FormDataEntryValue | null) {
-  const text = String(value || "").trim();
-  return text || null;
-}
-
 function accountWarmupPresetPayload(value: FormDataEntryValue | null): {
   warmup_status: string;
   warmup_score: number;
@@ -31432,50 +31428,6 @@ function inviteTrackingFromForm(
     source_ref: sourceRef,
     account_id: cleanOptionalText(form.get("invite_tracking_account_id")),
   };
-}
-
-function splitTextareaValues(value: FormDataEntryValue | null) {
-  return Array.from(
-    new Set(
-      String(value || "")
-        .split(/[\n,;]+/)
-        .map((item) => item.trim())
-        .filter(Boolean),
-    ),
-  );
-}
-
-function numberOrNull(value: FormDataEntryValue | null) {
-  const text = String(value || "").trim();
-  if (!text) return null;
-  const number = Number(text);
-  return Number.isFinite(number) ? number : null;
-}
-
-function parseReactionWeights(value: FormDataEntryValue | null) {
-  const text = String(value || "").trim();
-  if (!text) return {};
-  const weights: Record<string, number> = {};
-  text
-    .split(/[\n,;]+/)
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .forEach((line) => {
-      const [reactionRaw, weightRaw] = line.split(/[=:]/, 2);
-      const reaction = String(reactionRaw || "").trim();
-      const weight = Number(String(weightRaw || "").trim());
-      if (reaction && Number.isFinite(weight) && weight > 0) {
-        weights[reaction] = Math.round(weight);
-      }
-    });
-  return weights;
-}
-
-function reactionWeightsText(value: unknown) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return "";
-  return Object.entries(value as Record<string, unknown>)
-    .map(([reaction, weight]) => `${reaction}=${weight}`)
-    .join("\n");
 }
 
 function sourceInvalidLabel(source: Source) {

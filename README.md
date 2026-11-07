@@ -13,6 +13,8 @@ A portfolio snapshot of a Telegram campaign management platform. The repository 
 
 The `telegram_gateway` package contains interfaces and contracts; its transport implementation and contact integration are intentionally excluded. Deployment configuration, private operational documents, runtime assets and credentials are also excluded. Imports and tests that require the missing transport cannot run in this snapshot, and it is not a deployable application.
 
+See [architecture overview](docs/architecture.md) for the request flow and review boundaries.
+
 ## Static checks and isolated tests
 
 Python 3.12 is required. To inspect the code locally:
